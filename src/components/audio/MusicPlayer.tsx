@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 import { Play, Pause, ExternalLink } from 'lucide-react';
 import { useAudioStore } from '@/stores';
 import { cn } from '@/lib/utils';
@@ -15,21 +15,23 @@ export const MusicPlayer: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const { isPlaying, setIsPlaying } = useAudioStore();
 
-  const handleToggle = useCallback(() => {
+  // 同步 isPlaying 状态与实际音频播放
+  useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     if (isPlaying) {
-      audio.pause();
-      setIsPlaying(false);
+      audio.play().catch((err) => {
+        console.error('自动播放失败:', err);
+        setIsPlaying(false);
+      });
     } else {
-      audio.play()
-        .then(() => setIsPlaying(true))
-        .catch((err) => {
-          console.error('播放失败:', err);
-          setIsPlaying(false);
-        });
+      audio.pause();
     }
+  }, [isPlaying, setIsPlaying]);
+
+  const handleToggle = useCallback(() => {
+    setIsPlaying(!isPlaying);
   }, [isPlaying, setIsPlaying]);
 
   return (
