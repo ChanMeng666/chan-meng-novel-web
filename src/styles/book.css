@@ -4,9 +4,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  padding: 0.5rem;
+  height: 100vh;
+  width: 100vw;
+  padding: 0;
   perspective: 2000px;
+  overflow: hidden;
 }
 
 /* 书架背景 */
@@ -47,34 +49,54 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 2rem;
+  padding: 1.25rem;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .page-left .page-inner {
-  padding-left: 2rem;
-  padding-right: 2.5rem;
+  padding-left: 1.25rem;
+  padding-right: 1.5rem;
 }
 
 .page-right .page-inner {
-  padding-left: 2.5rem;
-  padding-right: 2rem;
+  padding-left: 1.5rem;
+  padding-right: 1.25rem;
+}
+
+/* 隐藏滚动条但保持功能 */
+.page-inner::-webkit-scrollbar {
+  width: 4px;
+}
+
+.page-inner::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.page-inner::-webkit-scrollbar-thumb {
+  background: rgba(139, 69, 19, 0.2);
+  border-radius: 2px;
+}
+
+.page-inner::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 69, 19, 0.4);
 }
 
 /* 页码样式 */
 .page-number {
   position: absolute;
-  bottom: 1.5rem;
-  font-size: 0.875rem;
+  bottom: 0.75rem;
+  font-size: 0.75rem;
   color: #8B7355;
   font-family: var(--font-serif);
 }
 
 .page-number.left {
-  left: 2rem;
+  left: 1.25rem;
 }
 
 .page-number.right {
-  right: 2rem;
+  right: 1.25rem;
 }
 
 /* 封面样式 */
@@ -162,10 +184,10 @@
 }
 
 .toc-title {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: var(--book-cover-color);
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   text-align: center;
   border-bottom: 2px solid var(--accent-color);
   padding-bottom: 0.5rem;
@@ -175,7 +197,7 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  padding: 0.75rem 0;
+  padding: 0.5rem 0;
   border-bottom: 1px dotted rgba(139, 69, 19, 0.3);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -187,41 +209,42 @@
 }
 
 .toc-chapter-title {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: var(--text-color);
 }
 
 .toc-page-number {
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   color: #8B7355;
-  margin-left: 1rem;
+  margin-left: 0.75rem;
 }
 
 /* 内容样式 */
 .content-heading {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: bold;
   color: var(--book-cover-color);
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   font-family: var(--font-serif);
 }
 
 .content-paragraph {
-  font-size: 1rem;
-  line-height: 1.8;
+  font-size: 0.9rem;
+  line-height: 1.75;
   color: var(--text-color);
   text-indent: 2em;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   font-family: var(--font-serif);
   text-align: justify;
 }
 
 .content-quote {
-  border-left: 4px solid var(--accent-color);
-  padding-left: 1rem;
-  margin: 1.5rem 0;
+  border-left: 3px solid var(--accent-color);
+  padding-left: 0.75rem;
+  margin: 1rem 0;
   font-style: italic;
   color: #666;
+  font-size: 0.9rem;
 }
 
 .content-image {

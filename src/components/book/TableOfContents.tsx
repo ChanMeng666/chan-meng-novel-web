@@ -17,7 +17,7 @@ export const TableOfContents = forwardRef<HTMLDivElement, TableOfContentsProps>(
         )}
         data-density="soft"
       >
-        <div className="page-inner absolute inset-0 p-8">
+        <div className="page-inner absolute inset-0">
           {/* 目录标题 */}
           <h2 className="toc-title">目 录</h2>
 

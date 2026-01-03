@@ -19,40 +19,36 @@ export const useResponsiveBook = (): BookDimensions => {
       const vh = window.innerHeight;
       const isMobile = vw < 768;
 
-      // 书籍宽高比约为 3:4
-      const aspectRatio = 3 / 4;
+      // 书籍宽高比约为 2:3（更接近真实书籍比例）
+      const aspectRatio = 2 / 3;
 
       let width: number;
       let height: number;
 
       if (isMobile) {
-        // 移动端：单页显示，最大化占用空间
-        width = Math.min(vw - 16, 500);
-        height = width / aspectRatio;
+        // 移动端：单页显示，几乎占满屏幕
+        // 高度优先，留出极小边距
+        height = vh - 20;
+        width = height * aspectRatio;
 
-        // 确保高度不超过视口（只留很小的边距）
-        if (height > vh - 32) {
-          height = vh - 32;
-          width = height * aspectRatio;
+        // 如果宽度超出视口，按宽度计算
+        if (width > vw - 10) {
+          width = vw - 10;
+          height = width / aspectRatio;
         }
       } else {
-        // 桌面端：双页显示，最大化占用空间
-        // 导航栏和音乐播放器悬浮在书页上方，无需预留空间
-        const maxWidth = Math.min(vw - 32, 1400);
-        const maxHeight = vh - 32;
+        // 桌面端：双页显示，最大化占用屏幕
+        // 高度优先策略：先让高度占满，再计算宽度
+        height = vh - 20; // 只留20px边距
+        width = height * aspectRatio;
 
-        width = maxWidth / 2;
-        height = width / aspectRatio;
-
-        // 如果高度超出，按高度计算
-        if (height > maxHeight) {
-          height = maxHeight;
-          width = height * aspectRatio;
+        // 检查双页总宽度是否超出视口
+        const totalWidth = width * 2;
+        if (totalWidth > vw - 20) {
+          // 按宽度限制重新计算
+          width = (vw - 20) / 2;
+          height = width / aspectRatio;
         }
-
-        // 确保最小尺寸
-        width = Math.max(width, 300);
-        height = Math.max(height, 400);
       }
 
       setDimensions({

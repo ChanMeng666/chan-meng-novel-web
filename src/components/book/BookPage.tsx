@@ -26,8 +26,7 @@ export const BookPage = forwardRef<HTMLDivElement, BookPageProps>(
         {/* 页面内容区域 */}
         <div className={cn(
           "page-inner",
-          "absolute inset-0",
-          isLeft ? "pl-8 pr-10 py-8" : "pl-10 pr-8 py-8"
+          "absolute inset-0"
         )}>
           {/* 页面内容 */}
           <PageContent

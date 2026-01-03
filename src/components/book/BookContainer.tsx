@@ -75,11 +75,11 @@ export const BookContainer: React.FC = () => {
           ref={bookRef}
           width={width}
           height={height}
-          size="stretch"
-          minWidth={280}
-          maxWidth={700}
-          minHeight={380}
-          maxHeight={950}
+          size="fixed"
+          minWidth={200}
+          maxWidth={1200}
+          minHeight={300}
+          maxHeight={1600}
           showCover={true}
           mobileScrollSupport={true}
           onFlip={handleFlip}
@@ -90,7 +90,7 @@ export const BookContainer: React.FC = () => {
           flippingTime={800}
           usePortrait={isMobile}
           startZIndex={0}
-          autoSize={true}
+          autoSize={false}
           maxShadowOpacity={0.5}
           showPageCorners={true}
           disableFlipByClick={false}
