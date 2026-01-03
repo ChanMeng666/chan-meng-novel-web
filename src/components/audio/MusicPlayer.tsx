@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import {
@@ -11,8 +11,17 @@ import {
 import { useAudioStore } from '@/stores';
 import { cn } from '@/lib/utils';
 
+// 默认音乐 - 战士阿花
+const DEFAULT_MUSIC = {
+  id: 'music-main',
+  title: '战士阿花',
+  src: 'https://cdn1.suno.ai/7cd0994c-c606-4135-bdd0-2f9f8fb617d3.mp3',
+};
+
 export const MusicPlayer: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const {
     isPlaying,
     volume,
@@ -21,7 +30,18 @@ export const MusicPlayer: React.FC = () => {
     setIsPlaying,
     setVolume,
     toggleMute,
+    setCurrentTrack,
   } = useAudioStore();
+
+  // 使用默认音乐或当前音轨
+  const activeTrack = currentTrack || DEFAULT_MUSIC;
+
+  // 初始化时设置默认音乐
+  useEffect(() => {
+    if (!currentTrack) {
+      setCurrentTrack(DEFAULT_MUSIC);
+    }
+  }, [currentTrack, setCurrentTrack]);
 
   // 音量变化
   useEffect(() => {
@@ -30,23 +50,20 @@ export const MusicPlayer: React.FC = () => {
     }
   }, [volume, isMuted]);
 
-  // 音轨变化
+  // 音轨变化时加载音频
   useEffect(() => {
-    if (audioRef.current && currentTrack) {
-      audioRef.current.src = currentTrack.src;
-      if (isPlaying) {
-        audioRef.current.play().catch((e) => {
-          console.log('Auto-play was prevented:', e);
-          setIsPlaying(false);
-        });
-      }
+    if (audioRef.current && activeTrack) {
+      setIsLoaded(false);
+      setHasError(false);
+      audioRef.current.src = activeTrack.src;
+      audioRef.current.load();
     }
-  }, [currentTrack, setIsPlaying]);
+  }, [activeTrack]);
 
   // 播放/暂停状态变化
   useEffect(() => {
-    if (audioRef.current) {
-      if (isPlaying && currentTrack) {
+    if (audioRef.current && isLoaded) {
+      if (isPlaying) {
         audioRef.current.play().catch((e) => {
           console.log('Play was prevented:', e);
           setIsPlaying(false);
@@ -55,21 +72,33 @@ export const MusicPlayer: React.FC = () => {
         audioRef.current.pause();
       }
     }
-  }, [isPlaying, currentTrack, setIsPlaying]);
+  }, [isPlaying, isLoaded, setIsPlaying]);
 
   const handlePlayPause = () => {
-    if (!currentTrack) return;
+    if (hasError) return;
     setIsPlaying(!isPlaying);
   };
 
-  // 如果没有音轨，不显示播放器
-  if (!currentTrack) {
-    return null;
-  }
+  const handleCanPlay = () => {
+    setIsLoaded(true);
+    setHasError(false);
+  };
+
+  const handleError = () => {
+    console.error('Audio load error');
+    setHasError(true);
+    setIsPlaying(false);
+  };
 
   return (
     <div className="music-player">
-      <audio ref={audioRef} loop />
+      <audio
+        ref={audioRef}
+        loop
+        onCanPlay={handleCanPlay}
+        onError={handleError}
+        preload="auto"
+      />
 
       {/* 播放/暂停按钮 */}
       <Button
@@ -81,6 +110,7 @@ export const MusicPlayer: React.FC = () => {
         )}
         onClick={handlePlayPause}
         title={isPlaying ? '暂停' : '播放'}
+        disabled={hasError || !isLoaded}
       >
         {isPlaying ? (
           <Pause className="w-4 h-4" />
@@ -93,7 +123,7 @@ export const MusicPlayer: React.FC = () => {
       <div className="hidden sm:flex items-center gap-2 text-sm">
         <Music className="w-4 h-4 text-amber-600" />
         <span className="max-w-24 truncate text-gray-700">
-          {currentTrack.title}
+          {hasError ? '加载失败' : (isLoaded ? activeTrack.title : '加载中...')}
         </span>
       </div>
 
