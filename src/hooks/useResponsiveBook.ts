@@ -26,20 +26,20 @@ export const useResponsiveBook = (): BookDimensions => {
       let height: number;
 
       if (isMobile) {
-        // 移动端：单页显示，占满宽度
-        width = Math.min(vw - 32, 400);
+        // 移动端：单页显示，最大化占用空间
+        width = Math.min(vw - 16, 500);
         height = width / aspectRatio;
 
-        // 确保高度不超过视口
-        if (height > vh - 150) {
-          height = vh - 150;
+        // 确保高度不超过视口（只留很小的边距）
+        if (height > vh - 32) {
+          height = vh - 32;
           width = height * aspectRatio;
         }
       } else {
-        // 桌面端：双页显示
-        // 每页宽度 = 总宽度的一半
-        const maxWidth = Math.min(vw - 100, 1200);
-        const maxHeight = vh - 180;
+        // 桌面端：双页显示，最大化占用空间
+        // 导航栏和音乐播放器悬浮在书页上方，无需预留空间
+        const maxWidth = Math.min(vw - 32, 1400);
+        const maxHeight = vh - 32;
 
         width = maxWidth / 2;
         height = width / aspectRatio;
@@ -51,8 +51,8 @@ export const useResponsiveBook = (): BookDimensions => {
         }
 
         // 确保最小尺寸
-        width = Math.max(width, 350);
-        height = Math.max(height, 467);
+        width = Math.max(width, 300);
+        height = Math.max(height, 400);
       }
 
       setDimensions({

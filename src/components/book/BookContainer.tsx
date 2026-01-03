@@ -76,10 +76,10 @@ export const BookContainer: React.FC = () => {
           width={width}
           height={height}
           size="stretch"
-          minWidth={300}
-          maxWidth={600}
-          minHeight={400}
-          maxHeight={800}
+          minWidth={280}
+          maxWidth={700}
+          minHeight={380}
+          maxHeight={950}
           showCover={true}
           mobileScrollSupport={true}
           onFlip={handleFlip}

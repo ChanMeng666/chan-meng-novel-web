@@ -1,11 +1,11 @@
-/* 书籍容器 */
+/* 书籍容器 - 最大化书页面积 */
 .book-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 1rem;
+  padding: 0.5rem;
   perspective: 2000px;
 }
 
