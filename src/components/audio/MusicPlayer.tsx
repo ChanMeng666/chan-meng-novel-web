@@ -1,4 +1,4 @@
-import { useRef, useCallback, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Play, Pause, ExternalLink } from 'lucide-react';
 import { useAudioStore } from '@/stores';
 import { cn } from '@/lib/utils';
@@ -13,26 +13,44 @@ const MUSIC_CONFIG = {
 
 export const MusicPlayer: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const { isPlaying, setIsPlaying } = useAudioStore();
+  const [isLoaded, setIsLoaded] = useState(false);
+  const { isPlaying, setIsPlaying, currentTrack, setCurrentTrack } = useAudioStore();
 
-  // 同步 isPlaying 状态与实际音频播放
+  // 初始化时设置默认音乐
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    if (isPlaying) {
-      audio.play().catch((err) => {
-        console.error('自动播放失败:', err);
-        setIsPlaying(false);
-      });
-    } else {
-      audio.pause();
+    if (!currentTrack) {
+      setCurrentTrack(MUSIC_CONFIG);
     }
-  }, [isPlaying, setIsPlaying]);
+  }, [currentTrack, setCurrentTrack]);
 
-  const handleToggle = useCallback(() => {
+  // 音轨变化时加载音频
+  useEffect(() => {
+    if (audioRef.current) {
+      setIsLoaded(false);
+      audioRef.current.src = MUSIC_CONFIG.src;
+      audioRef.current.load();
+    }
+  }, []);
+
+  // 播放/暂停状态变化 - 只检查 isLoaded，不检查 hasInteracted
+  useEffect(() => {
+    if (audioRef.current && isLoaded) {
+      if (isPlaying) {
+        audioRef.current.play().catch((err) => {
+          console.error('播放失败:', err);
+          setIsPlaying(false);
+        });
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlaying, isLoaded, setIsPlaying]);
+
+  const handleCanPlay = () => setIsLoaded(true);
+
+  const handleToggle = () => {
     setIsPlaying(!isPlaying);
-  }, [isPlaying, setIsPlaying]);
+  };
 
   return (
     <div
@@ -48,8 +66,8 @@ export const MusicPlayer: React.FC = () => {
     >
       <audio
         ref={audioRef}
-        src={MUSIC_CONFIG.src}
         loop
+        onCanPlay={handleCanPlay}
         preload="auto"
       />
 
