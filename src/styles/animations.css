@@ -1,0 +1,109 @@
+/* 翻页时的阴影效果增强 */
+.stf__block {
+  box-shadow:
+    0 0 20px rgba(0, 0, 0, 0.2),
+    0 0 5px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 翻页中的页面 */
+.stf__item {
+  transition: box-shadow 0.3s ease;
+}
+
+/* 翻页过程中的光泽效果 */
+.stf__item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+/* 页面悬停效果（角落卷起提示） */
+@keyframes corner-lift {
+  0%, 100% {
+    transform: rotate(0deg) translateX(0);
+  }
+  50% {
+    transform: rotate(-2deg) translateX(-2px);
+  }
+}
+
+/* 淡入动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* 滑入动画 */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+/* 音乐播放动画 */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.music-playing {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+/* 加载动画 */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* 书本打开动画 */
+@keyframes bookOpen {
+  from {
+    transform: perspective(1000px) rotateY(-30deg);
+    opacity: 0;
+  }
+  to {
+    transform: perspective(1000px) rotateY(0);
+    opacity: 1;
+  }
+}
+
+.book-open {
+  animation: bookOpen 0.8s ease-out;
+}

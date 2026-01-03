@@ -1,0 +1,35 @@
+@import "./book.css";
+@import "./animations.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --book-cover-color: #8B4513;
+  --book-spine-color: #654321;
+  --paper-color: #FDF5E6;
+  --paper-shadow: rgba(0, 0, 0, 0.15);
+  --text-color: #2C1810;
+  --accent-color: #D4A574;
+
+  --font-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+  --font-sans: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-serif);
+  background: linear-gradient(135deg, #2C1810 0%, #4A3728 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+}
