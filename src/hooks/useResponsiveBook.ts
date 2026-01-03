@@ -58,10 +58,20 @@ export const useResponsiveBook = (): BookDimensions => {
       });
     };
 
-    calculateDimensions();
-    window.addEventListener('resize', calculateDimensions);
+    // 添加 debounce，300ms 延迟防止频繁重新渲染
+    let timeoutId: ReturnType<typeof setTimeout>;
+    const debouncedCalculate = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(calculateDimensions, 300);
+    };
 
-    return () => window.removeEventListener('resize', calculateDimensions);
+    calculateDimensions(); // 初始计算
+    window.addEventListener('resize', debouncedCalculate);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', debouncedCalculate);
+    };
   }, []);
 
   return dimensions;

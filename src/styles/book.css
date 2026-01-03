@@ -19,6 +19,15 @@
   z-index: -1;
 }
 
+/* 书籍翻页组件容器 */
+.book-open {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.book-open.transitioning {
+  opacity: 0.5;
+}
+
 /* 书籍翻页组件 */
 .book-flipbook {
   box-shadow:

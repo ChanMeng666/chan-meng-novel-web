@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useRef, useCallback, useEffect, useState } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import { BookPage } from './BookPage';
 import { BookCover } from './BookCover';
@@ -20,6 +20,10 @@ export const BookContainer: React.FC = () => {
   const { currentPage, setCurrentPage, setCurrentChapter, setTotalPages } = useBookStore();
   const { width, height, isMobile } = useResponsiveBook();
 
+  // 跟踪模式切换的过渡状态
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const prevIsMobileRef = useRef(isMobile);
+
   // 自动播放章节背景音乐
   useChapterMusic(currentPage);
 
@@ -31,6 +35,24 @@ export const BookContainer: React.FC = () => {
     // 封面 + 目录 + 内页 + 封底
     setTotalPages(pages.length + 3);
   }, [setTotalPages]);
+
+  // 响应式模式切换时的过渡效果和页码恢复
+  useEffect(() => {
+    if (prevIsMobileRef.current !== isMobile) {
+      setIsTransitioning(true);
+
+      const timer = setTimeout(() => {
+        // 恢复页码位置
+        if (bookRef.current && currentPage > 0) {
+          bookRef.current.pageFlip()?.turnToPage(currentPage);
+        }
+        setIsTransitioning(false);
+      }, 100);
+
+      prevIsMobileRef.current = isMobile;
+      return () => clearTimeout(timer);
+    }
+  }, [isMobile, currentPage]);
 
   // 翻页事件处理
   const handleFlip = useCallback((e: FlipEvent) => {
@@ -70,8 +92,9 @@ export const BookContainer: React.FC = () => {
       <div className="bookshelf-background" />
 
       {/* 翻书组件 */}
-      <div className="book-open">
+      <div className={`book-open ${isTransitioning ? 'transitioning' : ''}`}>
         <HTMLFlipBook
+          key={isMobile ? 'mobile' : 'desktop'}
           ref={bookRef}
           width={width}
           height={height}
