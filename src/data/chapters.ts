@@ -15,9 +15,9 @@ export const chapters: Chapter[] = [
     startPage: 3,
     endPage: 6,
     music: {
-      id: 'music-1',
-      title: '童年回忆',
-      src: '/assets/music/chapter1-bgm.mp3',
+      id: 'music-main',
+      title: '战士阿花',
+      src: 'https://cdn1.suno.ai/7cd0994c-c606-4135-bdd0-2f9f8fb617d3.mp3',
     },
   },
   {
@@ -27,9 +27,9 @@ export const chapters: Chapter[] = [
     startPage: 7,
     endPage: 10,
     music: {
-      id: 'music-2',
-      title: '青春无悔',
-      src: '/assets/music/chapter2-bgm.mp3',
+      id: 'music-main',
+      title: '战士阿花',
+      src: 'https://cdn1.suno.ai/7cd0994c-c606-4135-bdd0-2f9f8fb617d3.mp3',
     },
   },
   {
@@ -38,6 +38,11 @@ export const chapters: Chapter[] = [
     subtitle: '那些改变命运的时刻',
     startPage: 11,
     endPage: 14,
+    music: {
+      id: 'music-main',
+      title: '战士阿花',
+      src: 'https://cdn1.suno.ai/7cd0994c-c606-4135-bdd0-2f9f8fb617d3.mp3',
+    },
   },
   // 你可以根据需要添加更多章节
 ];
