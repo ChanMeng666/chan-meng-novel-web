@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useCallback } from 'react';
 import { Play, Pause, ExternalLink } from 'lucide-react';
 import { useAudioStore } from '@/stores';
 import { cn } from '@/lib/utils';
@@ -13,44 +13,24 @@ const MUSIC_CONFIG = {
 
 export const MusicPlayer: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
-  const { isPlaying, setIsPlaying, currentTrack, setCurrentTrack } = useAudioStore();
+  const { isPlaying, setIsPlaying } = useAudioStore();
 
-  // 初始化音乐
-  useEffect(() => {
-    if (!currentTrack) {
-      setCurrentTrack(MUSIC_CONFIG);
+  const handleToggle = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isPlaying) {
+      audio.pause();
+      setIsPlaying(false);
+    } else {
+      audio.play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => {
+          console.error('播放失败:', err);
+          setIsPlaying(false);
+        });
     }
-  }, [currentTrack, setCurrentTrack]);
-
-  // 加载音频
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.src = MUSIC_CONFIG.src;
-      audioRef.current.load();
-    }
-  }, []);
-
-  // 播放控制
-  useEffect(() => {
-    if (audioRef.current && isLoaded && hasInteracted) {
-      if (isPlaying) {
-        audioRef.current.play().catch(() => setIsPlaying(false));
-      } else {
-        audioRef.current.pause();
-      }
-    }
-  }, [isPlaying, isLoaded, hasInteracted, setIsPlaying]);
-
-  const handleToggle = () => {
-    if (!hasInteracted) {
-      setHasInteracted(true);
-    }
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleCanPlay = () => setIsLoaded(true);
+  }, [isPlaying, setIsPlaying]);
 
   return (
     <div
@@ -66,21 +46,19 @@ export const MusicPlayer: React.FC = () => {
     >
       <audio
         ref={audioRef}
+        src={MUSIC_CONFIG.src}
         loop
-        onCanPlay={handleCanPlay}
         preload="auto"
       />
 
       {/* 播放/暂停按钮 */}
       <button
         onClick={handleToggle}
-        disabled={!isLoaded}
         className={cn(
           "w-7 h-7 rounded-full",
           "flex items-center justify-center",
           "text-white/80 hover:text-white",
           "transition-all duration-200",
-          "disabled:opacity-40 disabled:cursor-not-allowed",
           isPlaying && "text-amber-400 hover:text-amber-300"
         )}
         title={isPlaying ? '暂停' : '播放'}
