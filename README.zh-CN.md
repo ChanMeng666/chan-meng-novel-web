@@ -10,7 +10,7 @@
 
 **创建精美的互动式数字书籍，带有逼真的翻页效果**
 
-[在线演示](https://chanmeng666.github.io/chan-meng-novel-web/) · [报告问题](https://github.com/ChanMeng666/chan-meng-novel-web/issues) · [功能建议](https://github.com/ChanMeng666/chan-meng-novel-web/issues)
+[在线演示](https://chanmeng666.github.io/flip-book-template/) · [报告问题](https://github.com/ChanMeng666/flip-book-template/issues) · [功能建议](https://github.com/ChanMeng666/flip-book-template/issues)
 
 </div>
 
@@ -39,7 +39,7 @@ Flip Book 是一个**配置驱动的电子书模板**，让你无需编写任何
 点击 GitHub 上的 **"Use this template"** 按钮，或克隆仓库：
 
 ```bash
-git clone https://github.com/ChanMeng666/chan-meng-novel-web.git my-ebook
+git clone https://github.com/ChanMeng666/flip-book-template.git my-ebook
 cd my-ebook
 npm install
 npm run dev

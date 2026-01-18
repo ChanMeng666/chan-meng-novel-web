@@ -74,5 +74,5 @@ Page ranges are calculated automatically - no manual maintenance needed!
 
 GitHub Pages via `.github/workflows/deploy.yml`:
 - Triggered on push to `master` branch
-- Base URL configured as `/chan-meng-novel-web/`
+- Base URL configured as `/flip-book-template/`
 - Output to `dist/` directory

@@ -10,7 +10,7 @@
 
 **Create beautiful, interactive digital books with realistic page-flip effects.**
 
-[Live Demo](https://chanmeng666.github.io/chan-meng-novel-web/) · [Report Bug](https://github.com/ChanMeng666/chan-meng-novel-web/issues) · [Request Feature](https://github.com/ChanMeng666/chan-meng-novel-web/issues)
+[Live Demo](https://chanmeng666.github.io/flip-book-template/) · [Report Bug](https://github.com/ChanMeng666/flip-book-template/issues) · [Request Feature](https://github.com/ChanMeng666/flip-book-template/issues)
 
 </div>
 
@@ -39,7 +39,7 @@ Flip Book is a **configuration-driven e-book template** that allows you to creat
 Click the **"Use this template"** button on GitHub, or clone the repository:
 
 ```bash
-git clone https://github.com/ChanMeng666/chan-meng-novel-web.git my-ebook
+git clone https://github.com/ChanMeng666/flip-book-template.git my-ebook
 cd my-ebook
 npm install
 npm run dev
