@@ -33,21 +33,21 @@ const SpotifyPlayer: React.FC<{
       {/* Spotify 嵌入播放器（始终保持在 DOM 中，收起时隐藏以保持播放状态） */}
       <div
         className={cn(
-          "mt-2 rounded-lg overflow-hidden shadow-xl",
+          "mt-2 rounded-xl overflow-hidden shadow-xl",
           "transition-all duration-200",
           isExpanded
-            ? "opacity-100 visible max-h-[100px]"
+            ? "opacity-100 visible max-h-[200px]"
             : "opacity-0 invisible max-h-0 mt-0 pointer-events-none"
         )}
       >
         <iframe
           src={`https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0`}
-          width="250"
-          height="80"
+          width="300"
+          height="152"
           frameBorder="0"
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
           loading="lazy"
-          className="rounded-lg"
+          className="rounded-xl"
         />
       </div>
     </div>
