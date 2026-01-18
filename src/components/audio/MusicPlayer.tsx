@@ -1,94 +1,53 @@
 import { useRef, useEffect, useState } from 'react';
-import { Play, Pause, ExternalLink, Music, ChevronDown, ChevronUp } from 'lucide-react';
+import { Play, Pause, ExternalLink, Music } from 'lucide-react';
 import { useAudioStore } from '@/stores';
 import { getBookConfig, getDefaultMusic } from '@/lib/config-loader';
 import { cn } from '@/lib/utils';
 import type { MusicTrackConfig } from '@/types/config';
 
-// Spotify 嵌入播放器组件
+// Spotify 嵌入播放器组件（精简版，与 AudioPlayer 风格一致）
 const SpotifyPlayer: React.FC<{
   trackId: string;
   isExpanded: boolean;
   onToggle: () => void;
-  externalUrl?: string;
-  showExternalLink?: boolean;
-}> = ({ trackId, isExpanded, onToggle, externalUrl, showExternalLink }) => {
+}> = ({ trackId, isExpanded, onToggle }) => {
   return (
     <div className="fixed top-4 right-4 z-50">
-      {/* 控制按钮 */}
-      <div
+      {/* 精简控制按钮 - 只有一个图标按钮 */}
+      <button
+        onClick={onToggle}
         className={cn(
-          "flex items-center gap-1.5",
+          "flex items-center justify-center",
+          "w-9 h-9 rounded-full",
           "bg-black/30 backdrop-blur-sm",
-          "rounded-full px-2 py-1.5",
           "border border-white/10",
           "transition-all duration-300",
-          "hover:bg-black/40"
+          "hover:bg-black/40",
+          isExpanded ? "text-green-400" : "text-white/80 hover:text-white"
         )}
+        title={isExpanded ? '收起播放器' : '展开播放器'}
       >
-        {/* Spotify 图标 */}
-        <div className="w-7 h-7 rounded-full flex items-center justify-center text-green-400">
-          <Music className="w-3.5 h-3.5" />
-        </div>
-
-        {/* 展开/收起按钮 */}
-        <button
-          onClick={onToggle}
-          className={cn(
-            "w-7 h-7 rounded-full",
-            "flex items-center justify-center",
-            "text-white/80 hover:text-white",
-            "transition-all duration-200"
-          )}
-          title={isExpanded ? '收起播放器' : '展开播放器'}
-        >
-          {isExpanded ? (
-            <ChevronUp className="w-3.5 h-3.5" />
-          ) : (
-            <ChevronDown className="w-3.5 h-3.5" />
-          )}
-        </button>
-
-        {/* 外部链接 */}
-        {showExternalLink && externalUrl && (
-          <>
-            <div className="w-px h-4 bg-white/20" />
-            <a
-              href={externalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(
-                "flex items-center gap-1",
-                "text-white/60 hover:text-white/90",
-                "text-xs transition-colors",
-                "pr-1"
-              )}
-              title="在 Spotify 中打开"
-            >
-              <ExternalLink className="w-3 h-3" />
-            </a>
-          </>
-        )}
-      </div>
+        <Music className="w-4 h-4" />
+      </button>
 
       {/* Spotify 嵌入播放器（始终保持在 DOM 中，收起时隐藏以保持播放状态） */}
       <div
         className={cn(
-          "mt-2 rounded-xl overflow-hidden shadow-xl",
+          "mt-2 rounded-lg overflow-hidden shadow-xl",
           "transition-all duration-200",
           isExpanded
-            ? "opacity-100 visible max-h-[200px]"
-            : "opacity-0 invisible max-h-0 mt-0"
+            ? "opacity-100 visible max-h-[100px]"
+            : "opacity-0 invisible max-h-0 mt-0 pointer-events-none"
         )}
       >
         <iframe
           src={`https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0`}
-          width="300"
-          height="152"
+          width="250"
+          height="80"
           frameBorder="0"
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
           loading="lazy"
-          className="rounded-xl"
+          className="rounded-lg"
         />
       </div>
     </div>
@@ -245,8 +204,6 @@ export const MusicPlayer: React.FC = () => {
         trackId={musicToPlay.spotifyTrackId!}
         isExpanded={isSpotifyExpanded}
         onToggle={() => setIsSpotifyExpanded(!isSpotifyExpanded)}
-        externalUrl={externalUrl}
-        showExternalLink={musicConfig.showExternalLink}
       />
     );
   }
