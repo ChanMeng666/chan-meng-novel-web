@@ -31,13 +31,18 @@ export const MusicPlayer: React.FC = () => {
     }
   }, [currentTrack, defaultMusic, setCurrentTrack]);
 
-  // 音轨变化时加载音频
+  // 音轨变化时加载音频（只有当 src 真正变化时才重新加载）
+  const previousSrcRef = useRef<string | null>(null);
   useEffect(() => {
     const musicToPlay = currentTrack || defaultMusic;
     if (audioRef.current && musicToPlay) {
-      setIsLoaded(false);
-      audioRef.current.src = musicToPlay.src;
-      audioRef.current.load();
+      // 只有当音乐源真正变化时才重新加载，避免同一首歌重复播放
+      if (musicToPlay.src !== previousSrcRef.current) {
+        previousSrcRef.current = musicToPlay.src;
+        setIsLoaded(false);
+        audioRef.current.src = musicToPlay.src;
+        audioRef.current.load();
+      }
     }
   }, [currentTrack, defaultMusic]);
 
