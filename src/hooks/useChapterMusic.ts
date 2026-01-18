@@ -24,12 +24,17 @@ export const useChapterMusic = (currentPage: number) => {
         previousMusicId.current = currentMusicId;
 
         if (currentChapter.music) {
+          // 传递完整的音乐配置（支持不同类型）
           setCurrentTrack({
             id: currentChapter.music.id,
             title: currentChapter.music.title,
+            type: currentChapter.music.type,
             src: currentChapter.music.src,
+            spotifyTrackId: currentChapter.music.spotifyTrackId,
+            externalUrl: currentChapter.music.externalUrl,
           });
-          if (autoPlay) {
+          // 只有音频类型才自动播放（Spotify 需要用户手动点击）
+          if (autoPlay && currentChapter.music.type !== 'spotify') {
             setIsPlaying(true);
           }
         } else {

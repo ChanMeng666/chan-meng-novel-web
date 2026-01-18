@@ -9,10 +9,15 @@ export interface Chapter {
 }
 
 // 音乐类型
+export type MusicType = 'audio' | 'spotify';
+
 export interface MusicTrack {
   id: string;
   title: string;
-  src: string;
+  type?: MusicType;           // 默认 'audio'
+  src?: string;               // 直接音频 URL
+  spotifyTrackId?: string;    // Spotify 曲目 ID
+  externalUrl?: string;       // 外部链接
   chapterId?: string;
 }
 

@@ -12,19 +12,25 @@ import type { ContentConfig, ChapterConfig, PageConfig, MusicTrackConfig } from 
 // 在这里定义所有的背景音乐，然后在章节中通过 musicId 引用
 // Define all background music here, then reference by musicId in chapters
 const music: Record<string, MusicTrackConfig> = {
+  // 直接音频文件（可完全控制播放）
+  // Direct audio file (full playback control)
   'main-theme': {
     id: 'main-theme',
     title: '战士阿花',
+    type: 'audio',
     src: 'https://cdn1.suno.ai/7cd0994c-c606-4135-bdd0-2f9f8fb617d3.mp3',
     externalUrl: 'https://suno.com/song/7cd0994c-c606-4135-bdd0-2f9f8fb617d3',
   },
-  // 添加更多音乐示例 (Add more music example):
-  // 'peaceful-melody': {
-  //   id: 'peaceful-melody',
-  //   title: '宁静旋律',
-  //   src: 'https://example.com/music.mp3',
-  //   externalUrl: 'https://example.com/music-page',
-  // },
+
+  // Spotify 嵌入（需要用户手动点击播放）
+  // Spotify embed (requires user to click play manually)
+  'spotify-chapter3': {
+    id: 'spotify-chapter3',
+    title: 'Spotify Music',
+    type: 'spotify',
+    spotifyTrackId: '6JHNsajzqfEBEcqm9nvb7Z',  // 从 Spotify URL 提取的 track ID
+    externalUrl: 'https://open.spotify.com/track/6JHNsajzqfEBEcqm9nvb7Z',
+  },
 };
 
 // ============ 章节定义 (Chapter Definitions) ============
@@ -54,7 +60,7 @@ const chapters: ChapterConfig[] = [
     id: 'chapter-3',
     title: '第三章：人生转折',
     subtitle: '那些改变命运的时刻',
-    musicId: 'main-theme',
+    musicId: 'spotify-chapter3',  // 使用 Spotify 音乐
   },
 ];
 

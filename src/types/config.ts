@@ -59,11 +59,15 @@ export interface ContentConfig {
   pages: PageConfig[];
 }
 
+export type MusicType = 'audio' | 'spotify';
+
 export interface MusicTrackConfig {
   id: string;
   title: string;
-  src: string;
-  externalUrl?: string;
+  type?: MusicType;           // 默认 'audio'
+  src?: string;               // 直接音频 URL（type: 'audio' 时必填）
+  spotifyTrackId?: string;    // Spotify 曲目 ID（type: 'spotify' 时必填）
+  externalUrl?: string;       // 外部链接
 }
 
 export interface ChapterConfig {
