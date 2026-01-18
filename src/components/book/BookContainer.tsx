@@ -29,7 +29,10 @@ export const BookContainer: React.FC = () => {
   const prevIsMobileRef = useRef(isMobile);
 
   // 自动播放章节背景音乐
-  useChapterMusic(currentPage);
+  // currentPage 是 FlipBook 索引 (封面=0, 目录=1, 内容页从2开始)
+  // 需要转换为内容页码 (1-based) 供 useChapterMusic 使用
+  const contentPageNumber = currentPage >= 2 ? currentPage - 1 : 0;
+  useChapterMusic(contentPageNumber);
 
   // 键盘导航支持
   useKeyboardNav(bookRef);
