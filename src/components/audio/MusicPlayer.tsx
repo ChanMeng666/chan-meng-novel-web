@@ -12,7 +12,7 @@ const SpotifyPlayer: React.FC<{
   onToggle: () => void;
 }> = ({ trackId, isExpanded, onToggle }) => {
   return (
-    <div className="fixed top-4 right-4 z-50">
+    <div className="fixed top-4 right-4 z-50 flex flex-col items-end">
       {/* 精简控制按钮 - 只有一个图标按钮 */}
       <button
         onClick={onToggle}
