@@ -1,17 +1,74 @@
-import { PageData } from '@/types';
+import type { ContentConfig, ChapterConfig, PageConfig, MusicTrackConfig } from '@/types/config';
 
-export const pages: PageData[] = [
-  // 序言 - 第1页
+/**
+ * 内容配置文件
+ *
+ * 在这里配置您的电子书内容：音乐、章节和页面。
+ * Content Configuration File
+ * Configure your e-book content: music, chapters, and pages.
+ */
+
+// ============ 音乐定义 (Music Definitions) ============
+// 在这里定义所有的背景音乐，然后在章节中通过 musicId 引用
+// Define all background music here, then reference by musicId in chapters
+const music: Record<string, MusicTrackConfig> = {
+  'main-theme': {
+    id: 'main-theme',
+    title: '战士阿花',
+    src: 'https://cdn1.suno.ai/7cd0994c-c606-4135-bdd0-2f9f8fb617d3.mp3',
+    externalUrl: 'https://suno.com/song/7cd0994c-c606-4135-bdd0-2f9f8fb617d3',
+  },
+  // 添加更多音乐示例 (Add more music example):
+  // 'peaceful-melody': {
+  //   id: 'peaceful-melody',
+  //   title: '宁静旋律',
+  //   src: 'https://example.com/music.mp3',
+  //   externalUrl: 'https://example.com/music-page',
+  // },
+};
+
+// ============ 章节定义 (Chapter Definitions) ============
+// 定义书籍的章节结构，页码范围会自动计算
+// Define book chapters, page ranges are calculated automatically
+const chapters: ChapterConfig[] = [
   {
-    id: 'page-1',
+    id: 'preface',
+    title: '序言',
+    subtitle: '写在前面的话',
+    // 序言不设置音乐 (No music for preface)
+    musicId: undefined,
+  },
+  {
+    id: 'chapter-1',
+    title: '第一章：童年时光',
+    subtitle: '那些无忧无虑的日子',
+    musicId: 'main-theme',
+  },
+  {
+    id: 'chapter-2',
+    title: '第二章：青春岁月',
+    subtitle: '成长的足迹',
+    musicId: 'main-theme',
+  },
+  {
+    id: 'chapter-3',
+    title: '第三章：人生转折',
+    subtitle: '那些改变命运的时刻',
+    musicId: 'main-theme',
+  },
+];
+
+// ============ 页面内容 (Page Contents) ============
+// 按顺序定义每一页的内容，通过 chapterId 关联到章节
+// Define each page in order, link to chapters via chapterId
+const pages: PageConfig[] = [
+  // -------- 序言 (Preface) --------
+  {
     chapterId: 'preface',
     layout: 'text-only',
     density: 'soft',
     content: [
-      {
-        type: 'heading',
-        text: '序言',
-      },
+      { type: 'heading', text: '序言' },
       {
         type: 'paragraph',
         text: '这本书记录了我人生旅途中的点点滴滴。从童年的欢声笑语，到青春的意气风发，再到人生的起起落落，每一段经历都是我生命中珍贵的财富。',
@@ -22,9 +79,7 @@ export const pages: PageData[] = [
       },
     ],
   },
-  // 序言 - 第2页
   {
-    id: 'page-2',
     chapterId: 'preface',
     layout: 'text-only',
     content: [
@@ -42,30 +97,22 @@ export const pages: PageData[] = [
       },
     ],
   },
-  // 第一章 - 第3页（章节标题页）
+
+  // -------- 第一章：童年时光 (Chapter 1) --------
   {
-    id: 'page-3',
     chapterId: 'chapter-1',
     layout: 'text-only',
     density: 'hard',
     content: [
-      {
-        type: 'heading',
-        text: '第一章',
-      },
-      {
-        type: 'heading',
-        text: '童年时光',
-      },
+      { type: 'heading', text: '第一章' },
+      { type: 'heading', text: '童年时光' },
       {
         type: 'paragraph',
         text: '那些无忧无虑的日子，是我记忆中最温暖的篇章。',
       },
     ],
   },
-  // 第一章 - 第4页
   {
-    id: 'page-4',
     chapterId: 'chapter-1',
     layout: 'text-image-split',
     content: [
@@ -86,9 +133,7 @@ export const pages: PageData[] = [
       },
     ],
   },
-  // 第一章 - 第5页
   {
-    id: 'page-5',
     chapterId: 'chapter-1',
     layout: 'image-full',
     content: [],
@@ -100,9 +145,7 @@ export const pages: PageData[] = [
       },
     ],
   },
-  // 第一章 - 第6页
   {
-    id: 'page-6',
     chapterId: 'chapter-1',
     layout: 'text-only',
     content: [
@@ -116,30 +159,22 @@ export const pages: PageData[] = [
       },
     ],
   },
-  // 第二章 - 第7页（章节标题页）
+
+  // -------- 第二章：青春岁月 (Chapter 2) --------
   {
-    id: 'page-7',
     chapterId: 'chapter-2',
     layout: 'text-only',
     density: 'hard',
     content: [
-      {
-        type: 'heading',
-        text: '第二章',
-      },
-      {
-        type: 'heading',
-        text: '青春岁月',
-      },
+      { type: 'heading', text: '第二章' },
+      { type: 'heading', text: '青春岁月' },
       {
         type: 'paragraph',
         text: '成长的足迹，记录着我青春的点点滴滴。',
       },
     ],
   },
-  // 第二章 - 第8页
   {
-    id: 'page-8',
     chapterId: 'chapter-2',
     layout: 'text-only',
     content: [
@@ -153,9 +188,7 @@ export const pages: PageData[] = [
       },
     ],
   },
-  // 第二章 - 第9页
   {
-    id: 'page-9',
     chapterId: 'chapter-2',
     layout: 'text-image-split',
     content: [
@@ -172,9 +205,7 @@ export const pages: PageData[] = [
       },
     ],
   },
-  // 第二章 - 第10页
   {
-    id: 'page-10',
     chapterId: 'chapter-2',
     layout: 'text-only',
     content: [
@@ -188,30 +219,22 @@ export const pages: PageData[] = [
       },
     ],
   },
-  // 第三章 - 第11页（章节标题页）
+
+  // -------- 第三章：人生转折 (Chapter 3) --------
   {
-    id: 'page-11',
     chapterId: 'chapter-3',
     layout: 'text-only',
     density: 'hard',
     content: [
-      {
-        type: 'heading',
-        text: '第三章',
-      },
-      {
-        type: 'heading',
-        text: '人生转折',
-      },
+      { type: 'heading', text: '第三章' },
+      { type: 'heading', text: '人生转折' },
       {
         type: 'paragraph',
         text: '那些改变命运的时刻，塑造了今天的我。',
       },
     ],
   },
-  // 第三章 - 第12页
   {
-    id: 'page-12',
     chapterId: 'chapter-3',
     layout: 'text-only',
     content: [
@@ -225,9 +248,7 @@ export const pages: PageData[] = [
       },
     ],
   },
-  // 第三章 - 第13页
   {
-    id: 'page-13',
     chapterId: 'chapter-3',
     layout: 'text-image-split',
     content: [
@@ -244,9 +265,7 @@ export const pages: PageData[] = [
       },
     ],
   },
-  // 第三章 - 第14页
   {
-    id: 'page-14',
     chapterId: 'chapter-3',
     layout: 'text-only',
     content: [
@@ -266,17 +285,9 @@ export const pages: PageData[] = [
   },
 ];
 
-// 获取总页数
-export function getTotalPages(): number {
-  return pages.length;
-}
-
-// 获取页面通过ID
-export function getPageById(id: string): PageData | undefined {
-  return pages.find(p => p.id === id);
-}
-
-// 获取章节的所有页面
-export function getPagesByChapter(chapterId: string): PageData[] {
-  return pages.filter(p => p.chapterId === chapterId);
-}
+// ============ 导出配置 (Export Configuration) ============
+export const contentConfig: ContentConfig = {
+  music,
+  chapters,
+  pages,
+};

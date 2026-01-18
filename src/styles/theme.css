@@ -1,0 +1,29 @@
+/**
+ * 主题 CSS 变量定义
+ *
+ * 这些变量会被 theme-loader.ts 动态覆盖
+ * 以下为默认值
+ */
+
+:root {
+  /* 封面颜色 */
+  --book-cover-color: #8B4513;
+  --book-cover-gradient: #654321;
+  --book-cover-text: #F5DEB3;
+
+  /* 内页颜色 */
+  --paper-color: #FDF5E6;
+  --text-color: #2C1810;
+  --accent-color: #D4A574;
+
+  /* 背景颜色 */
+  --bg-color: #2C1810;
+  --bg-gradient: #4A3728;
+
+  /* 字体 */
+  --font-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+  --font-sans: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", sans-serif;
+
+  /* 阴影 */
+  --paper-shadow: rgba(0, 0, 0, 0.15);
+}

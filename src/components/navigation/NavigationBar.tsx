@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Home, BookOpen, ChevronUp } from 'lucide-react';
-import { chapters } from '@/data/chapters';
+import { getChapters } from '@/lib/config-loader';
 import { useBookStore } from '@/stores';
 import { cn } from '@/lib/utils';
 
@@ -17,6 +17,7 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
 }) => {
   const [showChapters, setShowChapters] = useState(false);
   const { currentPage, currentChapter } = useBookStore();
+  const chapters = getChapters();
 
   // 当前显示的页码
   const displayPage = Math.max(1, currentPage - 1);

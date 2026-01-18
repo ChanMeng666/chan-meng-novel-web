@@ -1,38 +1,47 @@
 import { useRef, useEffect, useState } from 'react';
 import { Play, Pause, ExternalLink } from 'lucide-react';
 import { useAudioStore } from '@/stores';
+import { getBookConfig, getDefaultMusic } from '@/lib/config-loader';
 import { cn } from '@/lib/utils';
-
-// 音乐配置
-const MUSIC_CONFIG = {
-  id: 'music-main',
-  title: '战士阿花',
-  src: 'https://cdn1.suno.ai/7cd0994c-c606-4135-bdd0-2f9f8fb617d3.mp3',
-  sunoUrl: 'https://suno.com/song/7cd0994c-c606-4135-bdd0-2f9f8fb617d3',
-};
 
 export const MusicPlayer: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const { isPlaying, setIsPlaying, currentTrack, setCurrentTrack } = useAudioStore();
 
+  const { features } = getBookConfig();
+  const musicConfig = features?.music;
+
+  // 如果音乐功能被禁用，不渲染
+  if (!musicConfig?.enabled) {
+    return null;
+  }
+
+  // 获取默认音乐
+  const defaultMusic = getDefaultMusic();
+
   // 初始化时设置默认音乐
   useEffect(() => {
-    if (!currentTrack) {
-      setCurrentTrack(MUSIC_CONFIG);
+    if (!currentTrack && defaultMusic) {
+      setCurrentTrack({
+        id: defaultMusic.id,
+        title: defaultMusic.title,
+        src: defaultMusic.src,
+      });
     }
-  }, [currentTrack, setCurrentTrack]);
+  }, [currentTrack, defaultMusic, setCurrentTrack]);
 
   // 音轨变化时加载音频
   useEffect(() => {
-    if (audioRef.current) {
+    const musicToPlay = currentTrack || defaultMusic;
+    if (audioRef.current && musicToPlay) {
       setIsLoaded(false);
-      audioRef.current.src = MUSIC_CONFIG.src;
+      audioRef.current.src = musicToPlay.src;
       audioRef.current.load();
     }
-  }, []);
+  }, [currentTrack, defaultMusic]);
 
-  // 播放/暂停状态变化 - 只检查 isLoaded，不检查 hasInteracted
+  // 播放/暂停状态变化
   useEffect(() => {
     if (audioRef.current && isLoaded) {
       if (isPlaying) {
@@ -51,6 +60,17 @@ export const MusicPlayer: React.FC = () => {
   const handleToggle = () => {
     setIsPlaying(!isPlaying);
   };
+
+  // 获取当前播放的音乐
+  const musicToPlay = currentTrack || defaultMusic;
+  const externalUrl = currentTrack
+    ? (getDefaultMusic()?.externalUrl || undefined)
+    : defaultMusic?.externalUrl;
+
+  // 如果没有音乐配置，不渲染
+  if (!musicToPlay) {
+    return null;
+  }
 
   return (
     <div
@@ -91,23 +111,27 @@ export const MusicPlayer: React.FC = () => {
       </button>
 
       {/* 分隔线 */}
-      <div className="w-px h-4 bg-white/20" />
+      {musicConfig.showExternalLink && externalUrl && (
+        <div className="w-px h-4 bg-white/20" />
+      )}
 
-      {/* Suno 链接 */}
-      <a
-        href={MUSIC_CONFIG.sunoUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={cn(
-          "flex items-center gap-1",
-          "text-white/60 hover:text-white/90",
-          "text-xs transition-colors",
-          "pr-1"
-        )}
-        title="在 Suno 上查看"
-      >
-        <ExternalLink className="w-3 h-3" />
-      </a>
+      {/* 外部链接 */}
+      {musicConfig.showExternalLink && externalUrl && (
+        <a
+          href={externalUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cn(
+            "flex items-center gap-1",
+            "text-white/60 hover:text-white/90",
+            "text-xs transition-colors",
+            "pr-1"
+          )}
+          title="查看音乐来源"
+        >
+          <ExternalLink className="w-3 h-3" />
+        </a>
+      )}
     </div>
   );
 };

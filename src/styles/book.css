@@ -15,7 +15,7 @@
 .bookshelf-background {
   position: fixed;
   inset: 0;
-  background: radial-gradient(ellipse at center, #4A3728 0%, #2C1810 70%);
+  background: radial-gradient(ellipse at center, var(--bg-gradient) 0%, var(--bg-color) 70%);
   z-index: -1;
 }
 
@@ -110,12 +110,12 @@
 
 /* 封面样式 */
 .book-cover {
-  background: linear-gradient(135deg, var(--book-cover-color), #654321);
+  background: linear-gradient(135deg, var(--book-cover-color), var(--book-cover-gradient));
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #F5DEB3;
+  color: var(--book-cover-text);
   text-align: center;
   padding: 2rem;
   position: relative;
@@ -157,7 +157,7 @@
 
 /* 封底样式 */
 .book-back-cover {
-  background: linear-gradient(135deg, #654321, var(--book-cover-color));
+  background: linear-gradient(135deg, var(--book-cover-gradient), var(--book-cover-color));
 }
 
 /* 书脊效果 */

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { BookOpen, ChevronDown, ChevronUp } from 'lucide-react';
-import { chapters } from '@/data/chapters';
+import { getChapters } from '@/lib/config-loader';
 import { useBookStore } from '@/stores';
 import { cn } from '@/lib/utils';
 
@@ -12,6 +12,7 @@ interface ChapterNavProps {
 export const ChapterNav: React.FC<ChapterNavProps> = ({ onSelectChapter }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { currentChapter } = useBookStore();
+  const chapters = getChapters();
 
   const currentChapterData = chapters.find(ch => ch.id === currentChapter);
 

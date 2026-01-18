@@ -5,17 +5,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --book-cover-color: #8B4513;
-  --book-spine-color: #654321;
-  --paper-color: #FDF5E6;
-  --paper-shadow: rgba(0, 0, 0, 0.15);
-  --text-color: #2C1810;
-  --accent-color: #D4A574;
-
-  --font-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
-  --font-sans: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", sans-serif;
-}
+/* 注意：CSS 变量已在 theme.css 中定义，并由 theme-loader.ts 动态应用 */
 
 * {
   margin: 0;
@@ -25,7 +15,7 @@
 
 body {
   font-family: var(--font-serif);
-  background: linear-gradient(135deg, #2C1810 0%, #4A3728 100%);
+  background: linear-gradient(135deg, var(--bg-color) 0%, var(--bg-gradient) 100%);
   min-height: 100vh;
   overflow-x: hidden;
 }

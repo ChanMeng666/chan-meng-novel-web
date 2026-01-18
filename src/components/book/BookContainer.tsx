@@ -9,7 +9,7 @@ import { useBookStore } from '@/stores';
 import { useChapterMusic } from '@/hooks/useChapterMusic';
 import { useKeyboardNav } from '@/hooks/useKeyboardNav';
 import { useResponsiveBook } from '@/hooks/useResponsiveBook';
-import { pages, chapters, getChapterByPage } from '@/data';
+import { getPages, getChapters, getTotalBookPages, getChapterByPage } from '@/lib/config-loader';
 
 interface FlipEvent {
   data: number;
@@ -19,6 +19,10 @@ export const BookContainer: React.FC = () => {
   const bookRef = useRef<any>(null);
   const { currentPage, setCurrentPage, setCurrentChapter, setTotalPages } = useBookStore();
   const { width, height, isMobile } = useResponsiveBook();
+
+  // 获取配置数据
+  const pages = getPages();
+  const chapters = getChapters();
 
   // 跟踪模式切换的过渡状态
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -32,8 +36,7 @@ export const BookContainer: React.FC = () => {
 
   // 初始化总页数
   useEffect(() => {
-    // 封面 + 目录 + 内页 + 封底
-    setTotalPages(pages.length + 3);
+    setTotalPages(getTotalBookPages());
   }, [setTotalPages]);
 
   // 响应式模式切换时的过渡效果和页码恢复

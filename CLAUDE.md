@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-An interactive e-book website for "Chan's Novel" - a personal autobiography with realistic page-flip effects, chapter-based navigation, and background music per chapter.
+A **universal e-book framework** with realistic page-flip effects, chapter-based navigation, and background music per chapter. Users can customize their own e-book by modifying just 2 configuration files.
 
 ## Commands
 
@@ -15,6 +15,22 @@ npm run lint     # ESLint
 npm run preview  # Preview production build locally
 ```
 
+## Quick Start for Customization
+
+**To create your own e-book, edit these 2 files:**
+
+1. **`src/config/book.config.ts`** - Book metadata & theme
+   - Book title, subtitle, author
+   - Theme colors (cover, paper, text, accent)
+   - Feature toggles (music, navigation)
+
+2. **`src/config/content.config.ts`** - Content
+   - Music tracks definitions
+   - Chapters (with optional musicId reference)
+   - Pages (content blocks, images, layout)
+
+Page ranges are calculated automatically - no manual maintenance needed!
+
 ## Architecture
 
 **Tech Stack**: React 18 + TypeScript + Vite + Tailwind CSS + Zustand
@@ -23,17 +39,21 @@ npm run preview  # Preview production build locally
 - `react-pageflip`: Core page-flip animation (HTMLFlipBook component)
 - `zustand`: State management for book navigation and audio playback
 
+**Configuration System** (`src/config/`):
+- `book.config.ts`: Book info, theme colors, feature flags
+- `content.config.ts`: Music, chapters, pages (unified data source)
+
+**Config Loader** (`src/lib/`):
+- `config-loader.ts`: Processes config, auto-calculates page ranges
+- `theme-loader.ts`: Applies theme colors to CSS variables
+
 **State Management** (`src/stores/`):
 - `bookStore`: Current page, chapter, total pages, flipping state
 - `audioStore`: Music playback, volume, track selection, auto-play
 
-**Data Model** (`src/data/`):
-- `chapters.ts`: Chapter definitions with page ranges and optional music tracks
-- `pages.ts`: Individual page content (PageData with layout types: text-only, image-full, text-image-split, two-column)
-- `music-config.ts`: Chapter-to-music mappings
-
 **Book Structure** (`src/components/book/`):
 - `BookContainer`: Main component wrapping HTMLFlipBook with cover, TOC, content pages, and back cover
+- `BookCover`: Reads title/author from config
 - Pages indexed as: Cover(0) → TOC(1) → Content pages(2+) → Back cover
 
 **Custom Hooks** (`src/hooks/`):
@@ -42,6 +62,13 @@ npm run preview  # Preview production build locally
 - `useResponsiveBook`: Calculates book dimensions for mobile/desktop
 
 **Path Alias**: `@/*` maps to `./src/*`
+
+## Page Layout Types
+
+- `text-only`: Pure text content
+- `image-full`: Full-page image
+- `text-image-split`: Text above, image below
+- `two-column`: Two-column text layout
 
 ## Deployment
 

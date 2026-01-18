@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
 import { cn } from '@/lib/utils';
+import { getBookConfig } from '@/lib/config-loader';
 import { BookOpen } from 'lucide-react';
 
 interface BookCoverProps {
@@ -8,6 +9,8 @@ interface BookCoverProps {
 
 export const BookCover = forwardRef<HTMLDivElement, BookCoverProps>(
   ({ type }, ref) => {
+    const { book } = getBookConfig();
+
     if (type === 'front') {
       return (
         <div
@@ -24,20 +27,22 @@ export const BookCover = forwardRef<HTMLDivElement, BookCoverProps>(
 
           {/* 标题 */}
           <h1 className="book-cover-title font-serif">
-            Chan's novel
+            {book.title}
           </h1>
 
           {/* 副标题 */}
-          <p className="book-cover-subtitle">
-            一段人生的记忆
-          </p>
+          {book.subtitle && (
+            <p className="book-cover-subtitle">
+              {book.subtitle}
+            </p>
+          )}
 
           {/* 装饰线 */}
           <div className="w-32 h-0.5 bg-amber-200/50 my-6" />
 
           {/* 作者 */}
           <p className="book-cover-author">
-            Chan Meng 著
+            {book.author} 著
           </p>
         </div>
       );
@@ -54,17 +59,21 @@ export const BookCover = forwardRef<HTMLDivElement, BookCoverProps>(
         <div className="absolute inset-4 border border-amber-200/20 rounded-lg pointer-events-none" />
 
         {/* 结语 */}
-        <p className="text-lg italic opacity-80 max-w-xs text-center">
-          "人生如书，每一页都值得珍藏。"
-        </p>
+        {book.backCover?.quote && (
+          <p className="text-lg italic opacity-80 max-w-xs text-center">
+            {book.backCover.quote}
+          </p>
+        )}
 
         <div className="w-24 h-0.5 bg-amber-200/30 my-8" />
 
         {/* 版权信息 */}
         <div className="text-sm opacity-60 text-center">
-          <p>Chan's novel</p>
-          <p className="mt-2">© {new Date().getFullYear()} Chan Meng</p>
-          <p className="mt-1">All Rights Reserved</p>
+          <p>{book.title}</p>
+          <p className="mt-2">© {book.year || new Date().getFullYear()} {book.author}</p>
+          {book.backCover?.copyright && (
+            <p className="mt-1">{book.backCover.copyright}</p>
+          )}
         </div>
       </div>
     );

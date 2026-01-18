@@ -1,17 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { useAudioStore } from '@/stores';
-import { chapters } from '@/data/chapters';
-import { getMusicByChapterId } from '@/data/music-config';
+import { getChapterByPage } from '@/lib/config-loader';
 
 export const useChapterMusic = (currentPage: number) => {
   const { setCurrentTrack, setIsPlaying, autoPlay } = useAudioStore();
   const previousChapterId = useRef<string | null>(null);
 
   useEffect(() => {
-    // 找到当前页所属的章节
-    const currentChapter = chapters.find(
-      ch => currentPage >= ch.startPage && currentPage <= ch.endPage
-    );
+    // 找到当前页所属的章节（使用配置加载器）
+    const currentChapter = getChapterByPage(currentPage);
 
     if (!currentChapter) return;
 
@@ -19,11 +16,13 @@ export const useChapterMusic = (currentPage: number) => {
     if (currentChapter.id !== previousChapterId.current) {
       previousChapterId.current = currentChapter.id;
 
-      // 查找该章节的音乐
-      const track = getMusicByChapterId(currentChapter.id);
-
-      if (track) {
-        setCurrentTrack(track);
+      // 直接使用章节的 music 属性（已在配置加载时解析）
+      if (currentChapter.music) {
+        setCurrentTrack({
+          id: currentChapter.music.id,
+          title: currentChapter.music.title,
+          src: currentChapter.music.src,
+        });
         if (autoPlay) {
           setIsPlaying(true);
         }

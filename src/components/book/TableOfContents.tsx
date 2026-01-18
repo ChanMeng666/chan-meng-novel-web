@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import { cn } from '@/lib/utils';
-import { chapters } from '@/data/chapters';
+import { getChapters } from '@/lib/config-loader';
 
 interface TableOfContentsProps {
   onSelectChapter?: (pageNumber: number) => void;
@@ -8,6 +8,8 @@ interface TableOfContentsProps {
 
 export const TableOfContents = forwardRef<HTMLDivElement, TableOfContentsProps>(
   ({ onSelectChapter }, ref) => {
+    const chapters = getChapters();
+
     return (
       <div
         ref={ref}
