@@ -1,65 +1,499 @@
-# Chan's Novel - Interactive E-Book Website
+# Flip Book - Universal E-Book Template
 
-[![中文文档](https://img.shields.io/badge/文档-中文版-blue.svg)](./README.zh-CN.md)
+<div align="center">
 
-An interactive personal autobiography e-book website featuring realistic page-flip effects, chapter navigation, auto-playing background music, and responsive design.
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
+[![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite)](https://vitejs.dev/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-## Features
+**Create beautiful, interactive digital books with realistic page-flip effects.**
 
-- 📖 **Realistic Page-Flip** - 3D book flipping animation powered by react-pageflip
-- 🎵 **Chapter Background Music** - Auto-plays/switches music when entering different chapters
-- 📑 **Table of Contents** - Click TOC page or bottom navigation to jump to chapters
-- ⌨️ **Keyboard Navigation** - Arrow keys for page turning, Home/End for first/last page
-- 📱 **Responsive Design** - Dual-page on desktop, single-page on mobile
-- 🚀 **GitHub Pages Deployment** - Automated CI/CD workflow
+[Live Demo](https://chanmeng666.github.io/chan-meng-novel-web/) · [Report Bug](https://github.com/ChanMeng666/chan-meng-novel-web/issues) · [Request Feature](https://github.com/ChanMeng666/chan-meng-novel-web/issues)
 
-## Tech Stack
+</div>
 
-| Category | Technology |
-|----------|------------|
-| Framework | React 18 + TypeScript |
-| Build Tool | Vite 6 |
-| Styling | Tailwind CSS 3 |
-| State Management | Zustand 5 |
-| Page Flip | react-pageflip |
-| Icons | Lucide React |
+---
 
-## Project Structure
+## Overview
+
+Flip Book is a **configuration-driven e-book template** that allows you to create stunning interactive digital books without writing any React code. Simply edit two configuration files to customize your book's content, styling, and background music.
+
+### Key Features
+
+- **Realistic Page-Flip Animation** - 3D book flipping powered by react-pageflip
+- **Chapter-Based Background Music** - Auto-switches music when entering different chapters
+- **Dual Music Support** - Direct audio files (MP3) or Spotify embeds
+- **Easy Configuration** - Only 2 files to edit: `book.config.ts` and `content.config.ts`
+- **Responsive Design** - Dual-page on desktop, single-page on mobile
+- **Keyboard Navigation** - Arrow keys, Home/End support
+- **GitHub Pages Ready** - One-click deployment with included workflow
+
+---
+
+## Quick Start
+
+### 1. Use This Template
+
+Click the **"Use this template"** button on GitHub, or clone the repository:
+
+```bash
+git clone https://github.com/ChanMeng666/chan-meng-novel-web.git my-ebook
+cd my-ebook
+npm install
+npm run dev
+```
+
+### 2. Edit Configuration Files
+
+You only need to modify **2 files** in the `src/config/` folder:
+
+```
+src/config/
+├── book.config.ts      # Book info + theme colors
+└── content.config.ts   # Music + chapters + pages
+```
+
+### 3. Deploy to GitHub Pages
+
+Push to your repository and GitHub Actions will automatically deploy your book.
+
+---
+
+## Configuration Guide
+
+### Configuration Architecture
+
+```mermaid
+graph TB
+    subgraph "User Configuration (2 files)"
+        BC[book.config.ts<br/>Book Info & Theme]
+        CC[content.config.ts<br/>Music, Chapters & Pages]
+    end
+
+    subgraph "Auto-Generated"
+        PC[Processed Chapters<br/>with page ranges]
+        PP[Processed Pages<br/>with IDs & numbers]
+    end
+
+    subgraph "Runtime"
+        CL[Config Loader]
+        TL[Theme Loader]
+    end
+
+    BC --> TL
+    CC --> CL
+    CL --> PC
+    CL --> PP
+    TL --> CSS[CSS Variables]
+```
+
+---
+
+## Book Configuration (`book.config.ts`)
+
+This file controls your book's metadata and visual theme.
+
+### Basic Structure
+
+```typescript
+export const bookConfig: BookConfig = {
+  book: {
+    title: "My Book Title",
+    subtitle: "An optional subtitle",
+    author: "Your Name",
+    year: 2024,
+    backCover: {
+      quote: '"A meaningful quote for the back cover."',
+      copyright: "All Rights Reserved",
+    },
+  },
+  theme: {
+    colors: { /* ... */ },
+    fonts: { /* ... */ },
+  },
+  features: {
+    music: { /* ... */ },
+    navigation: { /* ... */ },
+  },
+};
+```
+
+### Theme Colors
+
+Customize your book's color scheme:
+
+```typescript
+theme: {
+  colors: {
+    // Cover appearance
+    cover: '#8B4513',           // Cover main color
+    coverGradient: '#654321',   // Cover gradient color
+    coverText: '#F5DEB3',       // Cover text color
+
+    // Inner pages
+    paper: '#FDF5E6',           // Paper background
+    text: '#2C1810',            // Body text color
+    accent: '#D4A574',          // Decorative elements
+
+    // Page background (behind the book)
+    background: '#2C1810',
+    backgroundGradient: '#4A3728',
+  },
+}
+```
+
+### Color Scheme Examples
+
+| Theme | Cover | Cover Gradient | Paper | Text |
+|-------|-------|----------------|-------|------|
+| Classic Brown | `#8B4513` | `#654321` | `#FDF5E6` | `#2C1810` |
+| Modern Blue | `#1E3A5F` | `#0D1B2A` | `#F8FAFC` | `#1E293B` |
+| Elegant Green | `#2D5016` | `#1A3009` | `#F0FDF4` | `#14532D` |
+| Romantic Pink | `#831843` | `#500724` | `#FFF1F2` | `#881337` |
+
+### Feature Toggles
+
+```typescript
+features: {
+  music: {
+    enabled: true,           // Enable/disable music player
+    autoPlay: false,         // Auto-play on chapter enter
+    showExternalLink: true,  // Show link to music source
+  },
+  navigation: {
+    showPageSlider: true,    // Show page progress slider
+    showChapterNav: true,    // Show chapter navigation
+    keyboardNav: true,       // Enable keyboard shortcuts
+  },
+}
+```
+
+---
+
+## Content Configuration (`content.config.ts`)
+
+This file defines your book's music, chapters, and pages.
+
+### Content Structure
+
+```mermaid
+graph LR
+    subgraph "content.config.ts"
+        M[Music<br/>Record&lt;string, MusicTrack&gt;]
+        C[Chapters<br/>ChapterConfig[]]
+        P[Pages<br/>PageConfig[]]
+    end
+
+    M -->|musicId| C
+    C -->|chapterId| P
+
+    subgraph "Auto-Calculated"
+        C -->|startPage/endPage| AC[Processed Chapters]
+        P -->|pageNumber| AP[Processed Pages]
+    end
+```
+
+### Defining Music
+
+Define all your background music tracks, then reference them in chapters by `musicId`:
+
+```typescript
+const music: Record<string, MusicTrackConfig> = {
+  // Direct audio file (full playback control)
+  'main-theme': {
+    id: 'main-theme',
+    title: 'Background Music',
+    type: 'audio',
+    src: 'https://example.com/music.mp3',
+    externalUrl: 'https://example.com/song-page',  // Optional
+  },
+
+  // Spotify embed (requires user interaction)
+  'chapter3-spotify': {
+    id: 'chapter3-spotify',
+    title: 'Spotify Track',
+    type: 'spotify',
+    spotifyTrackId: '6JHNsajzqfEBEcqm9nvb7Z',  // From Spotify URL
+    externalUrl: 'https://open.spotify.com/track/...',
+  },
+};
+```
+
+### Music Types Comparison
+
+| Feature | `type: 'audio'` | `type: 'spotify'` |
+|---------|-----------------|-------------------|
+| Auto-play | Yes (if enabled) | No (requires click) |
+| Playback control | Full | Limited (Spotify controls) |
+| Offline support | Yes | No |
+| File hosting | Self-hosted URL | Spotify servers |
+| UI | Simple play/pause button | Expandable Spotify player |
+
+### How to Get Spotify Track ID
+
+From a Spotify URL like:
+```
+https://open.spotify.com/track/6JHNsajzqfEBEcqm9nvb7Z
+```
+The track ID is: `6JHNsajzqfEBEcqm9nvb7Z`
+
+### Defining Chapters
+
+Chapters organize your content and can have associated music:
+
+```typescript
+const chapters: ChapterConfig[] = [
+  {
+    id: 'preface',
+    title: 'Preface',
+    subtitle: 'Before We Begin',
+    musicId: undefined,  // No music for this chapter
+  },
+  {
+    id: 'chapter-1',
+    title: 'Chapter 1: The Beginning',
+    subtitle: 'Where it all started',
+    musicId: 'main-theme',  // References music defined above
+  },
+  {
+    id: 'chapter-2',
+    title: 'Chapter 2: The Journey',
+    musicId: 'main-theme',  // Same music continues
+  },
+  {
+    id: 'chapter-3',
+    title: 'Chapter 3: New Horizons',
+    musicId: 'chapter3-spotify',  // Different music
+  },
+];
+```
+
+> **Note:** Page ranges (`startPage`/`endPage`) are **automatically calculated** based on page order. You don't need to maintain them manually!
+
+### Music Switching Behavior
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Book
+    participant MusicPlayer
+
+    User->>Book: Turn to Chapter 1 (main-theme)
+    Book->>MusicPlayer: Play "main-theme"
+    MusicPlayer->>MusicPlayer: Start playing
+
+    User->>Book: Turn to Chapter 2 (main-theme)
+    Book->>MusicPlayer: Same music, continue
+    Note over MusicPlayer: No restart!
+
+    User->>Book: Turn to Chapter 3 (spotify)
+    Book->>MusicPlayer: Switch to Spotify
+    MusicPlayer->>MusicPlayer: Load Spotify embed
+```
+
+### Defining Pages
+
+Each page belongs to a chapter and contains content blocks:
+
+```typescript
+const pages: PageConfig[] = [
+  // Chapter title page
+  {
+    chapterId: 'chapter-1',
+    layout: 'text-only',
+    density: 'hard',  // Hard page for chapter starts
+    content: [
+      { type: 'heading', text: 'Chapter 1' },
+      { type: 'heading', text: 'The Beginning' },
+      { type: 'paragraph', text: 'An introductory paragraph...' },
+    ],
+  },
+
+  // Text with image
+  {
+    chapterId: 'chapter-1',
+    layout: 'text-image-split',
+    content: [
+      { type: 'paragraph', text: 'Story content here...' },
+      { type: 'quote', text: '"A meaningful quote."' },
+    ],
+    images: [
+      {
+        src: '/assets/images/photo.jpg',
+        alt: 'Description',
+        caption: 'Photo caption',
+      },
+    ],
+  },
+
+  // Full-page image
+  {
+    chapterId: 'chapter-1',
+    layout: 'image-full',
+    content: [],
+    images: [
+      { src: '/assets/images/landscape.jpg', alt: 'Scenic view' },
+    ],
+  },
+];
+```
+
+### Page Layouts
+
+```mermaid
+graph TB
+    subgraph "Layout Types"
+        TO["text-only<br/>📄 Text content only"]
+        IF["image-full<br/>🖼️ Full-page image"]
+        TIS["text-image-split<br/>📄🖼️ Side by side"]
+        TC["two-column<br/>📄📄 Two text columns"]
+    end
+```
+
+| Layout | Description | Best For |
+|--------|-------------|----------|
+| `text-only` | Text content fills the page | Chapters, prose |
+| `image-full` | Single image fills the page | Photos, artwork |
+| `text-image-split` | Text on left, image on right | Illustrated content |
+| `two-column` | Text in two columns | Dense text |
+
+### Content Block Types
+
+| Type | Example | Usage |
+|------|---------|-------|
+| `heading` | `{ type: 'heading', text: 'Title' }` | Chapter titles, section headers |
+| `paragraph` | `{ type: 'paragraph', text: '...' }` | Body text |
+| `quote` | `{ type: 'quote', text: '"..."' }` | Quotations, emphasis |
+| `poem` | `{ type: 'poem', text: '...' }` | Poetry, verse |
+
+### Page Density
+
+The `density` property controls the page-flip feel:
+
+- `'soft'` - Default, flexible page flip
+- `'hard'` - Stiff page, good for chapter title pages
+
+---
+
+## Adding Images
+
+Place your images in the `public/assets/images/` folder:
+
+```
+public/
+└── assets/
+    └── images/
+        ├── chapter1/
+        │   ├── photo1.jpg
+        │   └── photo2.jpg
+        └── chapter2/
+            └── landscape.jpg
+```
+
+Reference them in your config:
+
+```typescript
+images: [
+  {
+    src: '/assets/images/chapter1/photo1.jpg',
+    alt: 'Descriptive text for accessibility',
+    caption: 'Optional caption below image',
+  },
+]
+```
+
+---
+
+## Deployment
+
+### GitHub Pages (Recommended)
+
+This template includes a GitHub Actions workflow for automatic deployment.
+
+#### Step 1: Enable GitHub Pages
+
+1. Go to your repository **Settings**
+2. Navigate to **Pages** section
+3. Under **Source**, select **GitHub Actions**
+
+#### Step 2: Configure Base URL
+
+Edit `vite.config.ts` and update the `base` path to match your repository name:
+
+```typescript
+export default defineConfig({
+  base: '/your-repo-name/',  // Must match your GitHub repo name
+  // ...
+});
+```
+
+#### Step 3: Push and Deploy
+
+```bash
+git add .
+git commit -m "Configure for deployment"
+git push origin master
+```
+
+The workflow will automatically build and deploy your book. Check the **Actions** tab for status.
+
+#### Deployment Flow
+
+```mermaid
+graph LR
+    A[Push to master] --> B[GitHub Actions]
+    B --> C[npm install]
+    C --> D[npm run build]
+    D --> E[Upload to Pages]
+    E --> F[Live Site!]
+```
+
+### Custom Domain (Optional)
+
+1. Add a `CNAME` file in the `public/` folder with your domain
+2. Configure DNS settings with your domain provider
+3. Enable HTTPS in repository settings
+
+---
+
+## Development
+
+### Commands
+
+```bash
+npm install      # Install dependencies
+npm run dev      # Start development server
+npm run build    # Type check + production build
+npm run lint     # Run ESLint
+npm run preview  # Preview production build
+```
+
+### Project Structure
 
 ```
 src/
+├── config/                 # 👈 USER CONFIGURATION
+│   ├── book.config.ts      # Book info & theme
+│   └── content.config.ts   # Music, chapters & pages
+│
 ├── components/
-│   ├── book/           # Core book components
-│   │   ├── BookContainer.tsx   # Main container, integrates all book features
-│   │   ├── BookCover.tsx       # Front/back cover
-│   │   ├── BookPage.tsx        # Inner page component (forwardRef)
-│   │   ├── PageContent.tsx     # Page content renderer
-│   │   └── TableOfContents.tsx # TOC page
-│   ├── navigation/     # Navigation components
-│   │   ├── NavigationBar.tsx   # Floating bottom navigation bar
-│   │   ├── ChapterNav.tsx      # Chapter navigation
-│   │   └── PageSlider.tsx      # Page slider
-│   ├── audio/          # Audio components
-│   │   └── MusicPlayer.tsx     # Music player (top-right corner)
-│   └── ui/             # Common UI components
-├── stores/             # Zustand state management
-│   ├── bookStore.ts    # Book state (current page, chapter)
-│   └── audioStore.ts   # Audio state (playing, volume)
-├── hooks/              # Custom Hooks
-│   ├── useChapterMusic.ts    # Chapter music auto-play
-│   ├── useKeyboardNav.ts     # Keyboard navigation
-│   └── useResponsiveBook.ts  # Responsive size calculation
-├── data/               # Data definitions
-│   ├── chapters.ts     # Chapter configuration
-│   ├── pages.ts        # Page content
-│   └── music-config.ts # Music configuration
-├── types/              # TypeScript type definitions
-└── styles/             # Global styles
+│   ├── book/               # Book components
+│   ├── navigation/         # Navigation UI
+│   └── audio/              # Music player
+│
+├── lib/
+│   ├── config-loader.ts    # Config processing
+│   └── theme-loader.ts     # Theme application
+│
+├── stores/                 # Zustand state
+├── hooks/                  # Custom React hooks
+├── types/                  # TypeScript definitions
+└── styles/                 # Global CSS
 ```
 
-## Architecture
-
-### Overall Architecture
+### Architecture
 
 ```mermaid
 graph TB
@@ -74,241 +508,111 @@ graph TB
     end
 
     subgraph "Page Components"
-        Cover[BookCover<br/>Front/Back Cover]
-        TOC[TableOfContents<br/>TOC Page]
-        BP[BookPage<br/>Inner Pages]
-    end
-
-    subgraph "Auxiliary Components"
-        Nav[NavigationBar<br/>Bottom Nav]
-        Music[MusicPlayer<br/>Audio Player]
+        Cover[BookCover]
+        TOC[TableOfContents]
+        BP[BookPage]
     end
 
     subgraph "State Management"
-        BS[bookStore<br/>Page/Chapter State]
-        AS[audioStore<br/>Audio State]
+        BS[bookStore<br/>Page & Chapter]
+        AS[audioStore<br/>Music Playback]
     end
 
-    subgraph "Hooks"
-        UCM[useChapterMusic]
-        UKN[useKeyboardNav]
-        URB[useResponsiveBook]
+    subgraph "Configuration"
+        CL[config-loader.ts]
+        TL[theme-loader.ts]
     end
 
     App --> BC
     HP --> Cover
     HP --> TOC
     HP --> BP
-    BC --> Nav
-    BC --> Music
 
     BC -.-> BS
-    BC -.-> UCM
-    BC -.-> UKN
-    BC -.-> URB
-    Music -.-> AS
-    UCM -.-> AS
-    Nav -.-> BS
+    BC -.-> CL
+    CL -.-> AS
 ```
 
-### Book Page Structure
-
-```mermaid
-graph LR
-    subgraph "HTMLFlipBook Page Index"
-        P0["[0] Cover<br/>BookCover front"]
-        P1["[1] TOC<br/>TableOfContents"]
-        P2["[2] Page 1<br/>BookPage"]
-        P3["[3] Page 2<br/>BookPage"]
-        PN["[N] Page N-1<br/>BookPage"]
-        PB["[N+1] Back Cover<br/>BookCover back"]
-    end
-
-    P0 --> P1 --> P2 --> P3 --> PN --> PB
-```
-
-### Data Flow
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant HP as HTMLFlipBook
-    participant BC as BookContainer
-    participant BS as bookStore
-    participant UCM as useChapterMusic
-    participant AS as audioStore
-    participant MP as MusicPlayer
-
-    User->>HP: Page flip action
-    HP->>BC: onFlip(pageIndex)
-    BC->>BS: setCurrentPage()
-    BC->>BS: setCurrentChapter()
-
-    BS->>UCM: currentPage changed
-    UCM->>UCM: Detect chapter change
-    UCM->>AS: setCurrentTrack()
-    UCM->>AS: setIsPlaying(true)
-
-    AS->>MP: State update
-    MP->>MP: Play new music
-```
-
-### Page Layout Types
-
-```mermaid
-graph TB
-    subgraph "PageLayout Types"
-        TO["text-only<br/>Text Only"]
-        IF["image-full<br/>Full Image"]
-        TIS["text-image-split<br/>Text-Image Split"]
-        TC["two-column<br/>Two Column Text"]
-    end
-```
-
-### Content Block Types
-
-```mermaid
-graph LR
-    subgraph "ContentBlockType"
-        H[heading<br/>Heading]
-        P[paragraph<br/>Paragraph]
-        Q[quote<br/>Quote]
-        PM[poem<br/>Poem]
-    end
-```
-
-## Core Type Definitions
-
-```typescript
-// Chapter
-interface Chapter {
-  id: string;
-  title: string;
-  subtitle?: string;
-  startPage: number;  // Starting page number
-  endPage: number;    // Ending page number
-  music?: MusicTrack; // Chapter background music
-}
-
-// Page Data
-interface PageData {
-  id: string;
-  chapterId: string;
-  content: ContentBlock[];
-  images?: ImageData[];
-  layout?: 'text-only' | 'image-full' | 'text-image-split' | 'two-column';
-  density?: 'soft' | 'hard';  // Page flip effect: soft/hard page
-}
-
-// Content Block
-interface ContentBlock {
-  type: 'heading' | 'paragraph' | 'quote' | 'poem';
-  text: string;
-  style?: Record<string, string>;
-}
-```
-
-## Development Commands
-
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Type check + production build
-npm run build
-
-# ESLint check
-npm run lint
-
-# Preview production build
-npm run preview
-```
-
-## Adding New Content
-
-### Adding a New Chapter
-
-1. Add chapter definition in `src/data/chapters.ts`:
-
-```typescript
-{
-  id: 'chapter-4',
-  title: 'Chapter 4: New Beginning',
-  subtitle: 'Moving Forward',
-  startPage: 15,
-  endPage: 18,
-  music: {
-    id: 'music-new',
-    title: 'New Track',
-    src: 'https://example.com/music.mp3',
-  },
-}
-```
-
-2. Add corresponding page content in `src/data/pages.ts`
-
-3. If using separate music, configure mapping in `src/data/music-config.ts`
-
-### Adding a New Page
-
-Add to the `pages` array in `src/data/pages.ts`:
-
-```typescript
-{
-  id: 'page-15',
-  chapterId: 'chapter-4',
-  layout: 'text-image-split',
-  content: [
-    { type: 'heading', text: 'Title' },
-    { type: 'paragraph', text: 'Body content...' },
-  ],
-  images: [
-    { src: '/assets/images/photo.jpg', alt: 'Description', caption: 'Image caption' },
-  ],
-}
-```
+---
 
 ## Keyboard Shortcuts
 
-| Key | Function |
-|-----|----------|
+| Key | Action |
+|-----|--------|
 | `←` / `PageUp` | Previous page |
 | `→` / `PageDown` | Next page |
 | `Home` | Go to cover |
 | `End` | Go to back cover |
 
-## Deployment
+---
 
-The project is configured with GitHub Actions for automatic deployment to GitHub Pages:
+## Tech Stack
 
-- **Trigger**: Push to `master` branch
-- **Build Output**: `dist/` directory
-- **Base URL**: `/chan-meng-novel-web/`
+| Category | Technology |
+|----------|------------|
+| Framework | React 18 + TypeScript |
+| Build Tool | Vite 6 |
+| Styling | Tailwind CSS 3 |
+| State | Zustand 5 |
+| Page Flip | react-pageflip |
+| Icons | Lucide React |
 
-Deployment workflow:
-1. Push code to `master` branch
-2. GitHub Actions automatically runs `npm ci` and `npm run build`
-3. Build artifacts are automatically deployed to GitHub Pages
+---
 
-## Path Alias
+## FAQ
 
-The project configures `@/*` path alias pointing to `./src/*`, synchronized in both `tsconfig.json` and `vite.config.ts`.
+### Why doesn't music auto-play?
+
+Modern browsers block auto-play to improve user experience. Users must interact with the page first. The music will play after any click on the book.
+
+### Can I use local audio files?
+
+Yes! Place MP3 files in `public/assets/audio/` and reference them:
 
 ```typescript
-// Usage example
-import { useBookStore } from '@/stores';
-import { chapters } from '@/data/chapters';
+{
+  id: 'local-music',
+  title: 'Local Track',
+  type: 'audio',
+  src: '/assets/audio/background.mp3',
+}
 ```
 
-## Important Notes
+### How do I add more chapters?
 
-1. **forwardRef Required**: Components directly used as HTMLFlipBook children (`BookPage`, `BookCover`, `TableOfContents`) must use `forwardRef` because react-pageflip needs DOM element access
+1. Add chapter definition to `chapters` array in `content.config.ts`
+2. Add corresponding pages with matching `chapterId`
+3. Page ranges are calculated automatically
 
-2. **Page Index Calculation**: Actual page index = content page number + 2 (cover at index 0, TOC at index 1)
+### Can I change the page flip animation speed?
 
-3. **Responsive Design**: Book dimensions are dynamically calculated based on 2:3 aspect ratio, switches to single-page mode on mobile (< 768px)
+Edit `BookContainer.tsx` and modify the `flippingTime` prop:
 
-4. **Audio Autoplay**: Due to browser policy restrictions, first playback requires user interaction
+```typescript
+<HTMLFlipBook
+  flippingTime={800}  // milliseconds
+  // ...
+/>
+```
+
+---
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<div align="center">
+
+**Made with love for storytellers and book lovers**
+
+[⬆ Back to Top](#flip-book---universal-e-book-template)
+
+</div>
