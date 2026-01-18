@@ -182,8 +182,8 @@ This file defines your book's music, chapters, and pages.
 graph LR
     subgraph "content.config.ts"
         M[Music<br/>Record&lt;string, MusicTrack&gt;]
-        C[Chapters<br/>ChapterConfig[]]
-        P[Pages<br/>PageConfig[]]
+        C[Chapters<br/>ChapterConfig#91;#93;]
+        P[Pages<br/>PageConfig#91;#93;]
     end
 
     M -->|musicId| C
